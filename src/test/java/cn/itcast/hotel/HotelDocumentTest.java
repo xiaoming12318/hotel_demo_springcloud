@@ -37,7 +37,7 @@ public class HotelDocumentTest {
     private RestHighLevelClient client;
 
     @Autowired
-    private IHotelService IhotelService;
+    private IHotelService hotelService;
 
     @Test
     void testInit(){
@@ -63,7 +63,7 @@ public class HotelDocumentTest {
     @Test
     void createHotelIndex() throws IOException {
         //从数据库中获取酒店数据
-        Hotel hotel = IhotelService.getById(61083);
+        Hotel hotel = hotelService.getById(61083);
         //转换为文档类型
         HotelDoc hotelDoc = new HotelDoc(hotel);
         //1.准备Request对象
@@ -118,6 +118,19 @@ public class HotelDocumentTest {
 
         //3.发送请求
         client.delete(request,RequestOptions.DEFAULT);
+    }
+
+
+    /*
+    * 文档批处理
+    * */
+    @Test
+    void batchDocument(){
+        //1.创建Bulk请求
+
+        //2.将查询到的数据转化为文档类型数据
+
+        //3.利用JavaRestClient中的Bulk批处理，实现批量新增文档
     }
 
 
