@@ -14,9 +14,18 @@
     <name>hotel-demo</name>
     <description>Demo project for Spring Boot</description>
     <properties>
+
         <java.version>1.8</java.version>
+        <elasticsearch.version>7.12.1</elasticsearch.version>
     </properties>
     <dependencies>
+
+        <!--引入es的依赖,这个版本要和自己的es版本对应-->
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
