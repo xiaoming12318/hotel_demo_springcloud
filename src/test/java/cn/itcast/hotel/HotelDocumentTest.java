@@ -122,7 +122,7 @@ public class HotelDocumentTest {
 
 
     /*
-    * 文档批处理
+    * 文档批处理s
     * */
     @Test
     void batchDocument(){
