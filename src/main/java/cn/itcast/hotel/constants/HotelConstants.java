@@ -49,6 +49,12 @@ public class HotelConstants {
             "  }\n" +
             "}";
 
+    public static final String MAPPING_TEMPLATE_CREATE_TEST="\n" +
+            "{\n" +
+            " \"name\":\"小王\",\n" +
+            "\"age\":18\n" +
+            "}";
+
 
     public static final String MAPPING_TEMPLATE_DELETE="DELETE /hotel";
 }

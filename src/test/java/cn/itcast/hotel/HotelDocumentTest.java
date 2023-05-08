@@ -7,6 +7,7 @@ import cn.itcast.hotel.service.impl.HotelService;
 import com.alibaba.fastjson.JSON;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.List;
 
 import static cn.itcast.hotel.constants.HotelConstants.MAPPING_TEMPLATE_CREATE;
 
@@ -125,12 +127,22 @@ public class HotelDocumentTest {
     * 文档批处理s
     * */
     @Test
-    void batchDocument(){
-        //1.创建Bulk请求
+    void batchDocument() throws IOException {
+        //批量查询酒店数据
+        List<Hotel> hotels = hotelService.list();
 
-        //2.将查询到的数据转化为文档类型数据
-
-        //3.利用JavaRestClient中的Bulk批处理，实现批量新增文档
+        //1.创建request
+        BulkRequest bulkRequest = new BulkRequest();
+        //2.准备参数，添加多个新增的Request
+        //转换文档类型
+        for (Hotel hotel : hotels) {
+            HotelDoc hotelDoc = new HotelDoc(hotel);
+            bulkRequest.add(new IndexRequest("hotel")
+                    .id(hotel.getId().toString())
+                    .source(JSON.toJSONString(hotelDoc),XContentType.JSON));
+        }
+        //3.发送请求
+        client.bulk(bulkRequest,RequestOptions.DEFAULT);
     }
 
 
