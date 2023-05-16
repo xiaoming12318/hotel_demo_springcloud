@@ -59,13 +59,13 @@ public class HotelDocumentTest {
         //从数据库中获取酒店数据
         Hotel hotel = hotelService.getById(61083);
         //转换为文档类型
-        HotelDoc hotelDoc = new HotelDoc(hotel);
-        //1.准备Request对象
-        IndexRequest request = new IndexRequest("hotel").id(hotel.getId().toString());
-        //2.准备JSON文档
-        request.source(JSON.toJSONString(hotelDoc),XContentType.JSON);
-        //3.发送请求
-        client.index(request,RequestOptions.DEFAULT);
+//        HotelDoc hotelDoc = new HotelDoc(hotel);
+//        //1.准备Request对象
+//        IndexRequest request = new IndexRequest("hotel").id(hotel.getId().toString());
+//        //2.准备JSON文档
+//        request.source(JSON.toJSONString(hotelDoc),XContentType.JSON);
+//        //3.发送请求
+//        client.index(request,RequestOptions.DEFAULT);
     }
 
     /*
@@ -127,14 +127,14 @@ public class HotelDocumentTest {
         BulkRequest bulkRequest = new BulkRequest();
         //2.准备参数，添加多个新增的Request
         //转换文档类型
-        for (Hotel hotel : hotels) {
-            HotelDoc hotelDoc = new HotelDoc(hotel);
-            bulkRequest.add(new IndexRequest("hotel")
-                    .id(hotel.getId().toString())
-                    .source(JSON.toJSONString(hotelDoc),XContentType.JSON));
-        }
-        //3.发送请求
-        client.bulk(bulkRequest,RequestOptions.DEFAULT);
+//        for (Hotel hotel : hotels) {
+//            HotelDoc hotelDoc = new HotelDoc(hotel);
+//            bulkRequest.add(new IndexRequest("hotel")
+//                    .id(hotel.getId().toString())
+//                    .source(JSON.toJSONString(hotelDoc),XContentType.JSON));
+//        }
+//        //3.发送请求
+//        client.bulk(bulkRequest,RequestOptions.DEFAULT);
     }
 
 

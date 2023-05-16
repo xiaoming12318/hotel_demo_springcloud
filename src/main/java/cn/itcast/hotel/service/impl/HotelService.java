@@ -16,6 +16,8 @@ import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -80,11 +82,6 @@ public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHo
         }
         //2.2.3.星级条件
         if (params.getStarName()!=null && !params.getStarName().equals("")){
-            System.out.println(params.getStarName());
-            if (params.getStarName().equals("四星") || params.getStarName().equals("五星")){
-                params.setStarName(params.getStarName()+"级");
-            }
-            System.out.println(params.getStarName());
             boolQuery.filter(QueryBuilders.termQuery("starName", params.getStarName()));
         }
         //2.2.4.价格条件maxPrice
@@ -105,7 +102,23 @@ public class HotelService extends ServiceImpl<HotelMapper, Hotel> implements IHo
                     .unit(DistanceUnit.KILOMETERS));
         }
 
-        request.source().query(boolQuery);
+        //算分控制
+        FunctionScoreQueryBuilder functionScoreQueryBuilder =
+                QueryBuilders.functionScoreQuery(
+                        //原始数据，相关性算分的查询
+                        boolQuery,
+                        //function score的数组
+                        new FunctionScoreQueryBuilder.FilterFunctionBuilder[]{
+                                //其中的一个function score元素
+                                new FunctionScoreQueryBuilder.FilterFunctionBuilder(
+                                        //过滤条件
+                                        QueryBuilders.termQuery("isAD","true"),
+                                        //算分函数
+                                        ScoreFunctionBuilders.weightFactorFunction(10)
+                                )
+                        });
+
+        request.source().query(functionScoreQueryBuilder);
     }
 
     public PageResult handleResponse(SearchResponse search){
